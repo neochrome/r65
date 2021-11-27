@@ -13,4 +13,4 @@ prg = Program.new do
   end
 end
 
-prg.run
+prg.write

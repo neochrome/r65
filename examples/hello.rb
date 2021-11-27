@@ -23,4 +23,4 @@ prg = Program.new do
   byte "HELLO WORLD!#".to_scr
 end
 
-prg.run
+prg.write

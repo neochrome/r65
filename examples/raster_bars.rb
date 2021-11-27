@@ -56,5 +56,4 @@ prg = Program.new do
 
 end
 
-puts prg.to_s
-prg.run
+prg.write

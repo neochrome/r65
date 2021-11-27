@@ -57,5 +57,4 @@ prg = Program.new cfg do
   end
 end
 
-# puts prg
-prg.run
+prg.write

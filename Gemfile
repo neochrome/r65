@@ -1,9 +1,10 @@
 source "https://rubygems.org"
 
-gem "chunky_png"
+gem "chunky_png", "~> 1.3"
 
-group :development, :test do
-  gem "rspec"
-  gem "rake"
-  gem "nokogiri"
+group :development do
+  gem "rake", "~> 13.0"
+  gem "rspec", "~> 3.9"
+  gem "nokogiri", "~> 1.12"
+  gem "gem-release", "~> 2.2"
 end

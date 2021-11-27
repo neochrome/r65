@@ -49,5 +49,4 @@ prg = Program.new segs do
 
 end
 
-# puts prg
-prg.run
+prg.write

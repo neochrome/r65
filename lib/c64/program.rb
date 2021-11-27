@@ -4,7 +4,7 @@ module C64
 
   class Program < R65::Program
 
-    def run (filename = nil)
+    def write_and_run (filename = nil)
       filename = File.basename(Kernel.caller_locations.first.absolute_path, ".rb") + ".prg" unless filename
       write filename
       exec "x64", "-autostartprgmode", "1", filename

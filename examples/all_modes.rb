@@ -2,7 +2,7 @@ require_relative "../lib/r65"
 
 include R65
 
-all_modes = Program.new do
+prg = Program.new do
   label :foo
   lda &1
   label :bar
@@ -36,4 +36,4 @@ all_modes = Program.new do
   lda &:foo.hi_b
 end
 
-puts all_modes
+prg.write

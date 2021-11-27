@@ -67,5 +67,4 @@ prg = Program.new cfg do
 
 end
 
-# puts prg.to_s
-prg.run
+prg.write
