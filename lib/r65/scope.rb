@@ -103,9 +103,9 @@ module R65
       @segment.add ins
     end
 
-    def call (macro, *args, &block)
-      args << block if block
-      scope.instance_exec(*args, &macro)
+    def call (macro, *args, **kwargs, &block)
+      kwargs[:block] = block if block
+      scope.instance_exec(*args, **kwargs, &macro)
     end
 
     private

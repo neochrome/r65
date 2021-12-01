@@ -4,14 +4,14 @@ module C64
   module Macros
     module Utils
 
-      DebugRaster = proc do |color = 0|
+      DebugRaster = proc do |color: 0|
         if defined? DEBUG
           lda &color
           sta VIC2::BorderColor
         end
       end
 
-      ClearScreen = proc do |color: 0, fillbyte: 0x20, screen: C64::VIC2::Screen|
+      ClearScreen = proc do |color: 0, fillbyte: 0x20, screen: VIC2::DefaultScreen|
         lda &color
         sta VIC2::BackgroundColor
         sta VIC2::BorderColor
@@ -27,8 +27,7 @@ module C64
         end
       end
 
-      LoadScreen = proc do |src: nil, dst: VIC2::Screen|
-        raise ArgumentError, "Missing argument `src'" if src.nil?
+      LoadScreen = proc do |src:, dst: VIC2::DefaultScreen|
         ldx &0
         label :copy do
           [0x000,0x100,0x200,0x2e8].each do |offset|

@@ -18,7 +18,7 @@ prg = Program.new do
     call Macros::IRQ::Timers::Cancel
 
     call Macros::IRQ::Raster::Enable
-    call Macros::IRQ::Raster::Install, top
+    call Macros::IRQ::Raster::Install, **top
 
     cli
   end
@@ -39,7 +39,7 @@ prg = Program.new do
   end
 
   label :top do
-    call Macros::IRQ::Raster::StableHandler, bottom do
+    call Macros::IRQ::Raster::StableHandler, **bottom do
       [14,6].each do |color|
         call line, color
       end
@@ -47,7 +47,7 @@ prg = Program.new do
   end
 
   label :bottom do
-    call Macros::IRQ::Raster::StableHandler, top do
+    call Macros::IRQ::Raster::StableHandler, **top do
       [14,0].each do |color|
         call line, color
       end

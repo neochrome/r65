@@ -42,33 +42,33 @@ module C64
           asl VIC2::IRQ::StatusRegister
         end
 
-        Install = proc do |handler|
-          lda &(handler[:address]).lo_b
-          ldx &(handler[:address]).hi_b
+        Install = proc do |address:, line:|
+          lda &(address).lo_b
+          ldx &(address).hi_b
           sta VIC2::IRQ::VectorLo
           stx VIC2::IRQ::VectorHi
-          lda &(handler[:line])
+          lda &(line)
           sta VIC2::RasterCounter
         end
 
-        Handler = proc do |next_handler = nil, block|
-          raise ArgumentError, "Missing block!" unless block.is_a? Proc
-          call R65::Macros::Utils::PushState, :restore
+        Handler = proc do |address: nil, line: nil, block:|
+          raise ArgumentError, "Must supply a proc/block!" unless block.is_a? Proc
+          call R65::Macros::Utils::PushState, address: :restore
 
           call block
 
-          call Install, next_handler unless next_handler.nil?
+          call Install, address: address, line: line unless address.nil?
           call Ack
           label :restore
           call R65::Macros::Utils::PopState
           rti
         end
 
-        StableHandler = proc do |next_handler = nil, block|
-          raise ArgumentError, "Missing block!" unless block.is_a? Proc
+        StableHandler = proc do |address: nil, line: nil, block:|
+          raise ArgumentError, "Must supply a proc/block!" unless block.is_a? Proc
           # elapsed cycles in brackets
           # time to get here                             [07]
-          call R65::Macros::Utils::PushState, :restore # [19]
+          call R65::Macros::Utils::PushState, address: :restore # [19]
           # install next part (stable)
           lda &:stable.lo_b                # [23]
           ldx &:stable.hi_b                # [27]
@@ -88,11 +88,11 @@ module C64
           # restore stack pointer
           txs
           # wait until raster is in border
-          call R65::Macros::Utils::WasteCycles, 45
+          call R65::Macros::Utils::WasteCycles, cycles: 45
 
           call block
 
-          call Install, next_handler unless next_handler.nil?
+          call Install, address: address, line: line unless address.nil?
           call Ack
           label :restore
           call R65::Macros::Utils::PopState

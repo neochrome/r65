@@ -2,10 +2,10 @@ module R65
   module Macros
     module Utils
 
-      PushState = proc do |restore|
-        sta restore+1
-        stx restore+3
-        sty restore+5
+      PushState = proc do |address:|
+        sta address+1
+        stx address+3
+        sty address+5
       end
 
       PopState = proc do
@@ -14,7 +14,7 @@ module R65
         ldy &0
       end
 
-      WasteCycles = proc do |cycles|
+      WasteCycles = proc do |cycles:|
         raise RangeError, "Cycles must be 2 or more" unless cycles > 1
         nops = cycles / 2
         rem = cycles & 1
