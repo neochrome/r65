@@ -160,6 +160,7 @@ module R65
         else
           "%04x" % @arg.value
         end
+      value = "%s @ %s" %[@arg, value] if @arg.is_a? Addressing::LabelExpression
       "%-23s  %s %s" % [@bytes.map{|b|"%02x" % b}.join(" "), @name, value]
     end
 
