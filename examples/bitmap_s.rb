@@ -23,15 +23,9 @@ prg = Program.new cfg do
     ora &VIC2::Control1::Bitmap
     sta VIC2::Control1::Register
 
-    ldx &0
-    label :copy do
-      [0x000, 0x100, 0x200, 0x2e8].each do |o|
-        lda :screen_data+o,:x
-        sta vic2.screen+o,:x
-      end
-      inx
-      bne :copy
-    end
+    call Macros::Utils::LoadScreen,
+      screen_data: :screen_data,
+      screen: vic2.screen
 
     label :loop
     jmp :loop

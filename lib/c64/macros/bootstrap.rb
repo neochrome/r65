@@ -2,7 +2,7 @@ module C64
   module Macros
 
       Bootstrap = proc do |start: nil, block: nil|
-        basic = 0x0801
+        basic = DefaultBasic::Start
         raise ArgumentError, "Can't supply both start address and block at the same time." if start and block
         start = basic + 13 unless start
         pc! basic                      # [0] start of basic program

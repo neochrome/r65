@@ -1,6 +1,10 @@
 module C64
   # http://www.awsm.de/mem64/
 
+  module DefaultBasic
+    Start = 0x801
+  end
+
   module ROMConfig
     # https://www.c64-wiki.com/wiki/Bank_Switching
     ControlRegister = 0x0001
@@ -139,6 +143,25 @@ module C64
       # common settings
       Multicolor1 = Base + 0x25
       Multicolor2 = Base + 0x26
+    end
+
+    module Colors
+      Black      = 0x00
+      White      = 0x01
+      Red        = 0x02
+      Cyan       = 0x03
+      Purple     = 0x04
+      Green      = 0x05
+      Blue       = 0x06
+      Yellow     = 0x07
+      Orange     = 0x08
+      Brown      = 0x09
+      LightRed   = 0x0a
+      DarkGrey   = 0x0b
+      Grey       = 0x0c
+      LightGreen = 0x0d
+      LightBlue  = 0x0e
+      LightGrey  = 0x0f
     end
 
   end

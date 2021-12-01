@@ -30,17 +30,11 @@ prg = Program.new cfg do
     lda &bitmap.background_color
     sta VIC2::BackgroundColor
 
-    ldx &0
-    label :copy do
-      [0x000, 0x100, 0x200, 0x2e8].each do |o|
-        lda :screen_data+o,:x
-        sta vic2.screen+o,:x
-        lda :color_data+o,:x
-        sta vic2.color+o,:x
-      end
-      inx
-      bne :copy
-    end
+    call Macros::Utils::LoadScreen,
+      screen_data: :screen_data,
+      screen: vic2.screen,
+      color_data: :color_data,
+      color: vic2.color
 
     label :loop
     jmp :loop

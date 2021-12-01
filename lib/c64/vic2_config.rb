@@ -6,7 +6,7 @@ module C64
 
       def initialize
         @bank = 0x0000
-        @screen_rel = 0x0400
+        @screen_rel = DefaultScreen
         @char_rel = 0x1000
       end
 
