@@ -24,7 +24,7 @@ module R65
     end
 
     def label (name, &block)
-      raise "Label :#{name} is already defined in current scope" if @labels.has_key? name
+      raise ArgumentError, "Label :#{name} is already defined in current scope" if @labels.has_key? name
       @labels[name] = @segment.pc
       full_name = name.to_s
       traverse do |scope|
@@ -39,7 +39,7 @@ module R65
       traverse do |scope|
         pc = scope.labels[name] unless pc
       end
-      raise "Could not resolve label :#{name}" unless pc
+      raise ArgumentError, "Could not resolve label :#{name}" unless pc
       pc
     end
 
@@ -52,14 +52,16 @@ module R65
           instance_eval(&block) unless block.nil?
         end
         @segment = old_segment
+        return self
       else
-        Scope.new @segments, new_segment, @parent, "<scope>", &block unless block.nil?
+        return Scope.new @segments, new_segment, @parent, "<scope>", &block
       end
     end
 
     def segment! (name)
       raise "No such segment: #{name}" unless segment = @segments.find {|seg|seg.name == name}
       @segment = segment
+      self
     end
 
     def byte (*bytes)
@@ -106,6 +108,11 @@ module R65
     def call (macro, *args, **kwargs, &block)
       kwargs[:block] = block if block
       scope.instance_exec(*args, **kwargs, &macro)
+    end
+
+    def call_in_scope (macro, *args, **kwargs, &block)
+      kwargs[:block] = block if block
+      self.instance_exec(*args, **kwargs, &macro)
     end
 
     private
