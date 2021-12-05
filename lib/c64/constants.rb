@@ -43,6 +43,13 @@ module C64
     end
   end
 
+  module IO
+    module Keyboard
+      Columns = 0xdc00
+      Rows    = 0xdc01
+    end
+  end
+
   module VIC2
     Base = 0xd000
     DefaultScreen = 0x0400
