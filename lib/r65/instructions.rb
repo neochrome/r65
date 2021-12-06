@@ -22,8 +22,10 @@ module R65
   end
 
   class Label
-    def initialize (name)
+    attr_reader :checkpoint
+    def initialize (name, checkpoint: [])
       @name = name
+      @checkpoint = checkpoint
     end
     def to_s
       @name

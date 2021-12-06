@@ -85,7 +85,7 @@ module R65
     def as_symbols
       @instructions
         .select{|addr,ins|ins.class == Label}
-        .map{|addr,ins|{address: addr, label: ins.to_s}}
+        .map{|addr,lbl|{address: addr, label: lbl}}
     end
 
   end

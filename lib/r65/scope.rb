@@ -23,14 +23,14 @@ module R65
       Scope.new @segments, @segment, self, name.to_s, &block
     end
 
-    def label (name, &block)
+    def label (name, *args, &block)
       raise ArgumentError, "Label :#{name} is already defined in current scope" if @labels.has_key? name
       @labels[name] = @segment.pc
       full_name = name.to_s
       traverse do |scope|
         full_name = scope.name + ":" + full_name
       end
-      @segment.add Label.new full_name
+      @segment.add Label.new full_name, checkpoint: args
       scope name, &block unless block.nil?
     end
 
