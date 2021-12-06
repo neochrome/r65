@@ -79,15 +79,15 @@ describe R65::Scope do
       expect{ nested_scope.label :a_label }.to_not raise_error
     end
 
-    it "gives a macro an implicit scope" do
+    it "fails to add a label with same name in a macro" do
       @scope.label :a_label
       macro = proc do
         label :a_label
       end
-      expect{ @scope.call macro }.to_not raise_error
+      expect{ @scope.call macro }.to raise_error ArgumentError
     end
 
-    it "allows parent resolution when executing a macro" do
+    it "allows resolution when executing a macro" do
       @scope.label :a_label
       macro = proc do
         jmp :a_label
@@ -125,12 +125,12 @@ describe R65::Scope do
       expect{ @scope.resolve_label }.to raise_error ArgumentError
     end
 
-    it "fails to resolve a label from within the implicit scope of a macro" do
+    it "fails to resolve a label from within a macro with explicit scope" do
       macro = proc do
         label :a_label
       end
-      @scope.call macro
-      expect{ @scope.resolve_label }.to raise_error ArgumentError
+      @scope.call_with_scope macro, scope: "nested"
+      expect{ @scope.resolve_label :a_label }.to raise_error ArgumentError
     end
 
     it "resolves a label from within a macro executed in scope" do
@@ -139,7 +139,7 @@ describe R65::Scope do
         pc! 4
         label :a_label
       end
-      @scope.call_in_scope macro
+      @scope.call macro
       expect(@scope.resolve_label :a_label).to eq 4
     end
 

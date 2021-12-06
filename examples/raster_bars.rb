@@ -41,7 +41,7 @@ prg = Program.new do
   label :top do
     call Macros::IRQ::Raster::StableHandler, **bottom do
       [14,6].each do |color|
-        call line, color
+        call_with_scope line, color, scope: color.to_s
       end
     end
   end
@@ -49,7 +49,7 @@ prg = Program.new do
   label :bottom do
     call Macros::IRQ::Raster::StableHandler, **top do
       [14,0].each do |color|
-        call line, color
+        call_with_scope line, color
       end
     end
   end

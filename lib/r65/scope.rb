@@ -107,12 +107,12 @@ module R65
 
     def call (macro, *args, **kwargs, &block)
       kwargs[:block] = block if block
-      scope.instance_exec(*args, **kwargs, &macro)
+      self.instance_exec(*args, **kwargs, &macro)
     end
 
-    def call_in_scope (macro, *args, **kwargs, &block)
+    def call_with_scope (macro, *args, scope: "_", **kwargs, &block)
       kwargs[:block] = block if block
-      self.instance_exec(*args, **kwargs, &macro)
+      scope(scope).instance_exec(*args, **kwargs, &macro)
     end
 
     private
