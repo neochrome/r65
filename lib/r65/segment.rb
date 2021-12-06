@@ -82,6 +82,12 @@ module R65
         .join("\n")
     end
 
+    def as_symbols
+      @instructions
+        .select{|addr,ins|ins.class == Label}
+        .map{|addr,ins|{address: addr, label: ins.to_s}}
+    end
+
   end
 
 end

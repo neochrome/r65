@@ -19,7 +19,7 @@ module R65
       end
     end
 
-    def scope (name = "<scope>", &block)
+    def scope (name = "_", &block)
       Scope.new @segments, @segment, self, name.to_s, &block
     end
 

@@ -139,4 +139,31 @@ describe R65::Program do
 
   end
 
+  context "emitting debug symbols" do
+    it "only includes labels with addresses" do
+      cfg = R65::SegmentConfig.new do |cfg|
+        cfg.define :code, start: 1
+        cfg.define :data, start: 10
+      end
+      prg = R65::Program.new cfg do
+        segment! :code # starts at 1
+        byte 1         # [1 -> 2]
+        label :label1  # [0 -> 2]
+        byte 2         # [1 -> 3]
+        jmp :label1    # [3 -> 6]
+        label :label2  # [0 -> 6]
+
+        segment! :data # starts at 10
+        byte 3         # [1 -> 11]
+        label :label3  # [0 -> 11]
+      end
+
+      expect(prg.as_symbols).to eq [
+        {address: 2, label: ":label1"},
+        {address: 6, label: ":label2"},
+        {address: 11, label: ":label3"},
+      ]
+    end
+  end
+
 end

@@ -38,6 +38,7 @@ module R65
         file.print bytes
         puts "#{bytes.size} bytes written to #{filename}"
       end
+      filename
     end
 
     def assemble!
@@ -48,6 +49,10 @@ module R65
 
     def to_s
       @segments.map{|s|s.to_s}.join("\n")
+    end
+
+    def as_symbols
+      @segments.map(&:as_symbols).flatten
     end
 
   end

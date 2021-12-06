@@ -178,4 +178,19 @@ describe R65::Segment do
 
   end
 
+  context "debug symbols" do
+    it "emits only labels with addresses" do
+      seg = R65::Segment.new :code
+      seg.add R65::Label.new ":label1"
+      seg.add R65::Data.new 1
+      seg.add R65::Label.new ":label2"
+      seg.add R65::Data.new 2
+      
+      expect(seg.as_symbols).to eq [
+        {address: 0, label: ":label1"},
+        {address: 1, label: ":label2"},
+      ]
+    end
+  end
+
 end
