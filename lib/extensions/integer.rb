@@ -12,4 +12,8 @@ module IntegerExtensions
     (self % num).zero?
   end
 
+  def !()
+    (~self).twos_complement
+  end
+
 end

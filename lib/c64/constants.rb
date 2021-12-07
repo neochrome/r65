@@ -12,9 +12,9 @@ module C64
     IO      = 0b00000100
     Basic   = 0b00000001
     Kernal  = 0b00000010
-    NoIO     = Default & ~IO
-    NoBasic  = Default & ~Basic
-    NoKernal = Default & ~Kernal
+    NoIO     = Default & !IO
+    NoBasic  = Default & !Basic
+    NoKernal = Default & !Kernal
   end
 
   module CIA1
@@ -165,10 +165,12 @@ module C64
       Brown      = 0x09
       LightRed   = 0x0a
       DarkGrey   = 0x0b
+      DarkGray   = 0x0b
       Grey       = 0x0c
       LightGreen = 0x0d
       LightBlue  = 0x0e
       LightGrey  = 0x0f
+      LightGray  = 0x0f
     end
 
   end
