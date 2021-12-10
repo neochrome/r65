@@ -33,7 +33,7 @@ describe R65::Scope do
 
   end
 
-  describe "label scope resolution" do
+  describe "label scoping" do
     before do
       @code = R65::Segment.new :code
       @data = R65::Segment.new :data
@@ -51,13 +51,13 @@ describe R65::Scope do
       expect{ @scope.resolve_label :missing }.to raise_error ArgumentError
     end
 
-    it "fails to add a label with the same name as an exising label" do
+    it "fails to declare a conflicting label within the same scope" do
       @scope.label :a_label
 
       expect{ @scope.label :a_label }.to raise_error ArgumentError
     end
 
-    it "allows a label with the same name, in a different scope" do
+    it "allows a label with the same name as in an outer scope" do
       @scope.label :a_label
       nested_scope = @scope.scope "nested"
 
@@ -74,12 +74,12 @@ describe R65::Scope do
       expect(nested_scope.resolve_label :a_label).to eq 1
     end
 
-    it "gives a label an implicit scope" do
+    it "gives a label block an implicit scope" do
       nested_scope = @scope.label :a_label do end
       expect{ nested_scope.label :a_label }.to_not raise_error
     end
 
-    it "fails to add a label with same name in a macro" do
+    it "fails to declare a conflicting label from within a macro" do
       @scope.label :a_label
       macro = proc do
         label :a_label
@@ -119,10 +119,10 @@ describe R65::Scope do
       expect(@scope.resolve_label :a_label).to eq 2
     end
 
-    it "fails to resolve a label from a nested scope" do
+    it "fails to resolve an unqualified label in a nested scope" do
       nested_scope = @scope.scope "nested"
       nested_scope.label :a_label
-      expect{ @scope.resolve_label }.to raise_error ArgumentError
+      expect{ @scope.resolve_label :a_label }.to raise_error ArgumentError
     end
 
     it "fails to resolve a label from within a macro with explicit scope" do
@@ -141,6 +141,19 @@ describe R65::Scope do
       end
       @scope.call macro
       expect(@scope.resolve_label :a_label).to eq 4
+    end
+
+    it "resolves a fully qualified label in a nested scope" do
+      @scope.pc! 1
+      inner = @scope.scope "inner"
+      inner.pc! 3
+      inner.label :label1
+      inner_most = inner.scope "most"
+      inner_most.pc! 5
+      inner_most.label :label1
+
+      expect(@scope.resolve_label :"inner:label1").to eq 3
+      expect(@scope.resolve_label :"inner:most:label1").to eq 5
     end
 
   end

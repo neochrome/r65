@@ -6,6 +6,7 @@ module R65
     attr_reader :name
     attr_reader :parent
     attr_reader :labels
+    attr_reader :scopes
 
     def initialize (segments, segment, parent = nil, name = "", &block)
       @segments = segments
@@ -13,6 +14,7 @@ module R65
       @name = name
       @parent = parent
       @labels = {}
+      @scopes = []
 
       try_with_local_trace do
         instance_eval(&block) unless block.nil?
@@ -20,7 +22,9 @@ module R65
     end
 
     def scope (name = "_", &block)
-      Scope.new @segments, @segment, self, name.to_s, &block
+      s = Scope.new @segments, @segment, self, name.to_s, &block
+      scopes << s
+      s
     end
 
     def label (name, *args, &block)
@@ -35,12 +39,18 @@ module R65
     end
 
     def resolve_label (name)
-      pc = nil
       traverse do |scope|
-        pc = scope.labels[name] unless pc
+        return scope.labels[name] if scope.labels.has_key? name
       end
-      raise ArgumentError, "Could not resolve label :#{name}" unless pc
-      pc
+
+      rname = "#{root.name}:#{name.to_s}"
+      root.traverse_down do |s, qname|
+        s.labels.each_pair do |lbl,addr|
+          return addr if "#{qname}:#{lbl.to_s}" == rname
+        end
+      end
+
+      raise ArgumentError, "Could not resolve label :#{name}"
     end
 
     def segment (name, in_scope: false, &block)
@@ -115,7 +125,7 @@ module R65
       scope(scope).instance_exec(*args, **kwargs, &macro)
     end
 
-    private
+    protected
 
     def try_with_local_trace
       begin
@@ -131,6 +141,22 @@ module R65
       while !s.nil?
         yield s
         s = s.parent
+      end
+    end
+
+    def root ()
+      r = self
+      while true
+        break if r.parent.nil?
+        r = r.parent
+      end
+      r
+    end
+
+    def traverse_down (qname = name, &block)
+      yield self, qname
+      scopes.each do |s|
+        s.traverse_down "#{qname}:#{s.name}", &block
       end
     end
 
