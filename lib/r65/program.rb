@@ -32,7 +32,7 @@ module R65
     end
 
     def write (filename = nil)
-      filename = File.basename(Kernel.caller_locations.first.absolute_path, ".rb") + ".prg" unless filename
+      filename = File.basename(Kernel.caller_locations.last.absolute_path, ".rb") + ".prg" unless filename
       File.open filename, "wb" do |file|
         bytes = self.as_bytes.pack("C*")
         file.print bytes
