@@ -99,6 +99,54 @@ module C64
           rti
         end
 
+        class Chain
+          def initialize()
+            @links = []
+          end
+
+          def at(line:, &block)
+            @links << { :line => line, :block => block, :stable => false }
+            @links.sort_by! {|link|link[:line]}
+            self
+          end
+
+          def exactly_at(line:, &block)
+            @links << { line: line, block: block, stable: true }
+            @links.sort_by! {|link|link[:line]}
+            self
+          end
+
+          def init()
+            line = @links.first[:line]
+            proc do
+              call Install, line: line, address: :"irq#{line}"
+            end
+          end
+
+          def to_proc(*args,**kwargs,&block)
+            links = @links
+
+            proc do
+              handler_for = proc do |link, next_link|
+                next_label = :"irq#{next_link[:line]}"
+                label :"irq#{link[:line]}" do
+                  if link[:stable]
+                    call StableHandler, line: next_link[:line], address: next_label, &link[:block]
+                  else
+                    call Handler, line: next_link[:line], address: next_label, &link[:block]
+                  end
+                end
+              end
+
+              for i in 0...links.size - 1
+                handler_for.call links[i], links[i + 1]
+              end
+
+              handler_for.call links.last, links.first
+            end
+          end
+
+        end
       end
     end
   end
