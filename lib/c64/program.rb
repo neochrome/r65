@@ -25,7 +25,7 @@ module C64
           end
         }.flatten
         symbols_file = filename + ".sym"
-        File.open symbols_file, "wb" do |file|
+        File.open symbols_file, "w" do |file|
           file.print labels.join("\n")
           file.print "\n"
           file.print checkpoints.join("\n")
