@@ -91,7 +91,7 @@ module R65
       end
     end
 
-    def fill (n, byte)
+    def fill (n, byte = 0x00)
       byte Array.new n,byte
     end
 
