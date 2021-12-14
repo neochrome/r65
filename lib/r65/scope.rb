@@ -64,7 +64,7 @@ module R65
         @segment = old_segment
         return self
       else
-        return Scope.new @segments, new_segment, @parent, "<scope>", &block
+        return Scope.new @segments, new_segment, @parent, "_", &block
       end
     end
 
