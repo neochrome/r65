@@ -152,15 +152,29 @@ module R65
     def to_s
       value = case @mode
         when :imm
-          "&%02x" % @arg.value
+          "#$%02x" % @arg.value
         when :impl
           ""
-        when :zpg,:zpgx,:zpgy,:indx,:indy
-          "%02x" % @arg.value
+        when :zpg
+          "$%02x" % @arg.value
+        when :zpgx
+          "$%02x,X" % @arg.value
+        when :zpgy
+          "$%02x,Y" % @arg.value
         when :rel
           "%04x" % @arg.value
+        when :ind
+          "($%04x)" % @arg.value
+        when :indx
+          "($%02x,X)" % @arg.value
+        when :indy
+          "($%02x),Y" % @arg.value
+        when :absx
+          "$%04x,X" % @arg.value
+        when :absy
+          "$%04x,Y" % @arg.value
         else
-          "%04x" % @arg.value
+          "$%04x" % @arg.value
         end
       value = "%s @ %s" %[@arg, value] if @arg.is_a? Addressing::LabelExpression
       "%-23s  %s %s" % [@bytes.map{|b|"%02x" % b}.join(" "), @name, value]
