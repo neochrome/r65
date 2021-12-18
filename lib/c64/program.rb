@@ -11,16 +11,13 @@ module C64
           label = sym[:label].to_s.gsub(":",".")
           "al %04x %s" % [sym[:address], label]
         end
-        checkpoints = as_symbols.filter{|sym|sym[:label].checkpoint.any?}.map{|sym|
+        checkpoints = as_symbols.filter{|sym|sym[:label].checkpoints.any?}.map{|sym|
           label = sym[:label].to_s.gsub(":",".")
-          sym[:label].checkpoint.map do |checkpoint|
-            case checkpoint
-              when Symbol, String
-                ["%s %s" % [checkpoint.to_s, label]]
-              when Hash
-                checkpoint.each_pair.map{|kind,cond|"%s %s if %s" % [kind, label, cond]}
-              else
-                raise ArgumentError, "unsupported checkpoint type #{checkpoint.class}"
+          sym[:label].checkpoints.map do |checkpoint|
+            if checkpoint.condition
+              "%s %s if %s" % [checkpoint.kind, label, checkpoint.condition]
+            else
+              "%s %s" % [checkpoint.kind, label]
             end
           end
         }.flatten

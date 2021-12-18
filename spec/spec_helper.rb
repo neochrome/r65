@@ -1,5 +1,7 @@
 require "chunky_png"
-require_relative "../lib/c64/loaders/bitmap"
+# require_relative "../lib/c64/loaders/bitmap"
+require_relative "../lib/r65"
+require_relative "../lib/c64"
 
 class Array
   def to_image (w, h)

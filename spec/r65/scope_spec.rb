@@ -8,7 +8,6 @@ describe R65::Scope do
       @scope = R65::Scope.new [@seg], @seg
     end
 
-
     it "can align pc, v1" do
       @scope.pc! 0x10f0
       @scope.align! 0x100
@@ -154,6 +153,36 @@ describe R65::Scope do
 
       expect(@scope.resolve_label :"inner:label1").to eq 3
       expect(@scope.resolve_label :"inner:most:label1").to eq 5
+    end
+
+  end
+
+  describe "labels with checkpoint configuration" do
+    before do
+      @seg = R65::Segment.new :code
+      @scope = R65::Scope.new [@seg], @seg
+    end
+
+    it "allows a label with a break point" do
+      @scope.label :debug, :break
+      sym = @seg.as_symbols.first
+      expect(sym[:label].checkpoints.first.kind).to eq "break"
+    end
+
+    it "allows a label with a conditional break point" do
+      @scope.label :debug, :break => "A == $0"
+      sym = @seg.as_symbols.first
+      expect(sym[:label].checkpoints.first.condition).to eq "A == $0"
+    end
+
+    it "fails for an unknown kind of checkpoint" do
+      expect{ @scope.label :debug, :unsupported }.to raise_error ArgumentError
+    end
+
+    it "allows a label with multiple checkpoints" do
+      @scope.label :debug, :break, :watch, :trace
+      sym = @seg.as_symbols.first
+      expect(sym[:label].checkpoints.map(&:kind)).to eq ["break","watch","trace"]
     end
 
   end

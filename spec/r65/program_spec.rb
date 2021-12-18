@@ -140,7 +140,7 @@ describe R65::Program do
   end
 
   context "emitting debug symbols" do
-    it "only includes labels with addresses" do
+    it "only includes labels" do
       cfg = R65::SegmentConfig.new do |cfg|
         cfg.define :code, start: 1
         cfg.define :data, start: 10
@@ -158,10 +158,10 @@ describe R65::Program do
         label :label3  # [0 -> 11]
       end
 
-      expect(prg.as_symbols).to eq [
-        {address: 2, label: ":label1"},
-        {address: 6, label: ":label2"},
-        {address: 11, label: ":label3"},
+      expect(prg.as_symbols.map{|s|[s[:address],s[:label].to_s]}).to eq [
+        [2, ":label1"],
+        [6, ":label2"],
+        [11, ":label3"],
       ]
     end
   end

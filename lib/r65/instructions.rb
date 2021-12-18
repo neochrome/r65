@@ -22,10 +22,10 @@ module R65
   end
 
   class Label
-    attr_reader :checkpoint
-    def initialize (name, checkpoint: [])
+    attr_reader :checkpoints
+    def initialize (name, checkpoints: [])
       @name = name
-      @checkpoint = checkpoint
+      @checkpoints = checkpoints
     end
     def to_s
       @name
@@ -35,6 +35,33 @@ module R65
     end
     def assemble!
     end
+
+    class Checkpoint
+      attr_reader :kind, :condition
+      @kinds = [:break, :trace, :watch]
+      def self.from (config)
+        case config
+        when Symbol, String
+          raise ArgumentError, "Unsupported checkpoint configuration: #{config}. Try one of #{@kinds}" unless @kinds.any? config
+          [self.new(config.to_s)]
+        when Hash
+          config.each_pair.map do |kind,condition|
+            raise ArgumentError, "Unsupported checkpoint configuration: #{kind}. Try one of #{@kinds}" unless @kinds.any? kind
+            self.new kind.to_s, condition
+          end
+        else
+          raise ArgumentError, "Unsupported checkpoint configuration: #{config}. Try one of #{@kinds}"
+        end
+      end
+      def initialize(kind, condition = nil)
+        @kind = kind
+        @condition = condition
+      end
+      def to_s
+        @kind
+      end
+    end
+
   end
 
   class Instruction

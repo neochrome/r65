@@ -27,14 +27,15 @@ module R65
       s
     end
 
-    def label (name, *args, &block)
+    def label (name, *checkpoint_configuration, &block)
       raise ArgumentError, "Label :#{name} is already defined in current scope" if @labels.has_key? name
       @labels[name] = @segment.pc
       full_name = name.to_s
       traverse do |scope|
         full_name = scope.name + ":" + full_name
       end
-      @segment.add Label.new full_name, checkpoint: args
+      checkpoints = checkpoint_configuration.map{|cfg|Label::Checkpoint.from cfg}.flatten
+      @segment.add Label.new full_name, checkpoints: checkpoints
       scope name, &block unless block.nil?
     end
 
