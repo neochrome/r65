@@ -94,10 +94,10 @@ describe R65::Scope do
       expect{ @scope.call macro }.to_not raise_error
     end
 
-    it "resolves a label from a different segment when in scope" do
+    it "resolves a label from a different segment" do
       @scope.pc! 2
       @scope.label :a_label
-      segment_scope = @scope.segment :data, in_scope: true
+      segment_scope = @scope.segment :data
       segment_scope.pc! 3
       expect(segment_scope.resolve_label :a_label).to eq 2
     end
@@ -105,7 +105,7 @@ describe R65::Scope do
     it "fails to resolve a label from a different segment when not in scope" do
       @scope.pc! 2
       @scope.label :a_label
-      segment_scope = @scope.segment :data, in_scope: false
+      segment_scope = @scope.segment :data, scope: :a_different_scope
       segment_scope.pc! 3
       expect{ segment_scope.resolve_label :a_label }.to raise_error ArgumentError
     end

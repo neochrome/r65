@@ -40,7 +40,7 @@ prg = Program.new cfg do
     jmp :loop
   end
 
-  segment :bitmap, in_scope: true do
+  segment :bitmap do
     byte bitmap.data
     label :screen_data do
       byte bitmap.screen

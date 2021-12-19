@@ -85,17 +85,18 @@ prg = Program.new cfg do
 
   # Segments
 
-  segment :data do                 # switch to the specified segment..
-    fill 16, 0xff                  # ..for the duration of the block..
-    label :foo                     # ..also an implicit scope is created
-  end
-  segment :data, in_scope: true do # it's also possible to switch segment..
-    label :some_data               # ..without an implicit scope
-    byte 0x01
+  segment :data do                # switch to the specified segment..
+    label :some_data              # ..for the duration of the block..
+    fill 16, 0xff                 # ..the current scope is used by default
   end
   lda :some_data
-  segment! :data                   # finally, a segment may be specified for..
-  byte 0xab                        # ..all following instructions
+  segment :data, scope: :other do # it's also possible to switch segment..
+    label :data                   # ..with an explicit scope
+    byte 0x01
+  end
+  lda :"other:data"
+  segment! :data                  # finally, a segment may be specified for..
+  byte 0xab                       # ..all following instructions
 
 end
 

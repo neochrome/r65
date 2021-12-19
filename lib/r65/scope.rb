@@ -54,9 +54,9 @@ module R65
       raise ArgumentError, "Could not resolve label :#{name}"
     end
 
-    def segment (name, in_scope: false, &block)
+    def segment (name, scope: nil, &block)
       raise "No such segment: #{name}" unless new_segment = @segments.find {|seg|seg.name == name}
-      if in_scope
+      if scope.nil?
         old_segment = @segment
         @segment = new_segment
         try_with_local_trace do
@@ -65,7 +65,9 @@ module R65
         @segment = old_segment
         return self
       else
-        return Scope.new @segments, new_segment, @parent, "_", &block
+        s = Scope.new @segments, new_segment, @parent, scope.to_s, &block
+        @scopes << s
+        return s
       end
     end
 

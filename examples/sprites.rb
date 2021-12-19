@@ -45,7 +45,7 @@ prg = Program.new cfg do
     rti
   end
 
-  segment :data, in_scope: true do
+  segment :data do
     align! 64
     label :sprite_data
     circle.frames.each do |frame|
