@@ -28,6 +28,21 @@ module C64
       Enable     = 0b10000000
       DisableAll = TimerA | TimerB | TimeOfDay | Serial | Flag
     end
+
+    # https://www.c64-wiki.com/wiki/Keyboard
+    module PortA
+      DataDirection = 0xdc02
+      Outputs = 0xff
+      Inputs = 0x00
+      Data = 0xdc00
+    end
+
+    module PortB
+      DataDirection = 0xdc03
+      Outputs = 0xff
+      Inputs = 0x00
+      Data = 0xdc01
+    end
   end
 
   module CIA2
@@ -40,13 +55,6 @@ module C64
       Flag       = 0b00010000
       Enable     = 0b10000000
       DisableAll = TimerA | TimerB | TimeOfDay | Serial | Flag
-    end
-  end
-
-  module IO
-    module Keyboard
-      Columns = 0xdc00
-      Rows    = 0xdc01
     end
   end
 
