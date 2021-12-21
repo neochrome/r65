@@ -134,7 +134,7 @@ module R65
       begin
         yield
       rescue => err
-        err.backtrace.reject!{|bt|bt.include? __dir__} unless defined? DEBUG
+        err.backtrace.reject!{|bt|bt.include? __dir__} unless defined? $DEBUG
         raise err
       end
     end

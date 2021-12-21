@@ -5,7 +5,7 @@ module C64
     module Utils
 
       DebugRaster = proc do |color: VIC2::Colors::Black|
-        if defined? DEBUG and DEBUG
+        if $DEBUG
           lda &color
           sta VIC2::BorderColor
         end
