@@ -185,7 +185,7 @@ describe R65::Segment do
       seg.add R65::Data.new 1
       seg.add (label2=R65::Label.new ":label2")
       seg.add R65::Data.new 2
-      
+
       expect(seg.as_symbols).to eq [
         {address: 0, label: label1},
         {address: 1, label: label2},
