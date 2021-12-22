@@ -116,14 +116,14 @@ module C64
             self
           end
 
-          def init()
+          def start()
             line = @links.first[:line]
             proc do
               call Install, line: line, address: :"irq#{line}"
             end
           end
 
-          def to_proc(*args,**kwargs,&block)
+          def init(*args,**kwargs,&block)
             links = @links
 
             proc do

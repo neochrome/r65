@@ -65,12 +65,12 @@ module C64
         @bank + bitmap_rel
       end
 
-      def mem_setup
+      def init
         bank = bank_config
         mem = mem_config
 
         proc do
-          label :vic2_mem_setup
+          label :vic2_init
           lda VIC2::Bank::SetupRegister
           ana &VIC2::Bank::Mask
           ora &bank
