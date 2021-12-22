@@ -111,7 +111,7 @@ module C64
           end
 
           def exactly_at(line:, &block)
-            @links << { line: line, block: block, stable: true }
+            @links << { line: line - 2, block: block, stable: true }
             @links.sort_by! {|link|link[:line]}
             self
           end
