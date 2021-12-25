@@ -155,6 +155,130 @@ describe R65::Scope do
       expect(@scope.resolve_label :"inner:most:label1").to eq 5
     end
 
+    it "resolves a fully qualified label when nested within a label" do
+      @scope.pc! 1
+      @scope.label :inner do
+        pc! 3
+        label :label1
+        label :most do
+          pc! 5
+          label :label1
+        end
+      end
+
+      expect(@scope.resolve_label :"inner:label1").to eq 3
+      expect(@scope.resolve_label :"inner:most:label1").to eq 5
+    end
+
+    describe "qualified names (scopes)" do
+      before do
+        @scope.pc! 1
+        @scope.label :label1
+        @l1 = @scope.scope :l1
+        @l1.pc! 3
+        @l1.label :label3
+        @l11 = @l1.scope :l11
+        @l11.pc! 5
+        @l11.label :label5
+        @l12 = @l1.scope :l12
+        @l12.pc! 7
+        @l12.label :label7
+      end
+
+      it "resolves labels in current scope" do
+        expect(@scope.resolve_label :"label1").to eq 1
+        expect(@scope.resolve_label :"l1:label3").to eq 3
+        expect(@scope.resolve_label :"l1:l11:label5").to eq 5
+        expect(@scope.resolve_label :"l1:l12:label7").to eq 7
+        expect(@l1.resolve_label :"label3").to eq 3
+        expect(@l1.resolve_label :"l11:label5").to eq 5
+        expect(@l1.resolve_label :"l12:label7").to eq 7
+        expect(@l11.resolve_label :"label5").to eq 5
+        expect(@l12.resolve_label :"label7").to eq 7
+      end
+
+      it "resolves fully qualified labels" do
+        expect(@scope.resolve_label :"l1:label3").to eq 3
+        expect(@scope.resolve_label :"l1:l11:label5").to eq 5
+        expect(@scope.resolve_label :"l1:l12:label7").to eq 7
+        expect(@l1.resolve_label :"l1:label3").to eq 3
+        expect(@l1.resolve_label :"l1:l11:label5").to eq 5
+        expect(@l1.resolve_label :"l1:l12:label7").to eq 7
+        expect(@l11.resolve_label :"l1:l11:label5").to eq 5
+        expect(@l11.resolve_label :"l1:l12:label7").to eq 7
+        expect(@l12.resolve_label :"l1:l11:label5").to eq 5
+        expect(@l12.resolve_label :"l1:l12:label7").to eq 7
+      end
+
+      it "resolves labels in parent scope" do
+        expect(@l1.resolve_label :"label1").to eq 1
+        expect(@l11.resolve_label :"label3").to eq 3
+        expect(@l12.resolve_label :"label3").to eq 3
+      end
+
+      it "resolves nested in parent scope" do
+        expect(@l11.resolve_label :"l12:label7").to eq 7
+        expect(@l12.resolve_label :"l11:label5").to eq 5
+      end
+
+    end
+
+    describe "qualified names (labels)" do
+      before do
+        @scope.pc! 1
+        @scope.label :label1
+        @l1 = @scope.label :l1 do
+          pc! 3
+          label :label3
+        end
+        @l11 = @l1.label :l11 do
+          pc! 5
+          label :label5
+        end
+        @l12 = @l1.label :l12 do
+          pc! 7
+          label :label7
+        end
+      end
+
+      it "resolves labels in current scope" do
+        expect(@scope.resolve_label :"label1").to eq 1
+        expect(@scope.resolve_label :"l1:label3").to eq 3
+        expect(@scope.resolve_label :"l1:l11:label5").to eq 5
+        expect(@scope.resolve_label :"l1:l12:label7").to eq 7
+        expect(@l1.resolve_label :"label3").to eq 3
+        expect(@l1.resolve_label :"l11:label5").to eq 5
+        expect(@l1.resolve_label :"l12:label7").to eq 7
+        expect(@l11.resolve_label :"label5").to eq 5
+        expect(@l12.resolve_label :"label7").to eq 7
+      end
+
+      it "resolves fully qualified labels" do
+        expect(@scope.resolve_label :"l1:label3").to eq 3
+        expect(@scope.resolve_label :"l1:l11:label5").to eq 5
+        expect(@scope.resolve_label :"l1:l12:label7").to eq 7
+        expect(@l1.resolve_label :"l1:label3").to eq 3
+        expect(@l1.resolve_label :"l1:l11:label5").to eq 5
+        expect(@l1.resolve_label :"l1:l12:label7").to eq 7
+        expect(@l11.resolve_label :"l1:l11:label5").to eq 5
+        expect(@l11.resolve_label :"l1:l12:label7").to eq 7
+        expect(@l12.resolve_label :"l1:l11:label5").to eq 5
+        expect(@l12.resolve_label :"l1:l12:label7").to eq 7
+      end
+
+      it "resolves labels in parent scope" do
+        expect(@l1.resolve_label :"label1").to eq 1
+        expect(@l11.resolve_label :"label3").to eq 3
+        expect(@l12.resolve_label :"label3").to eq 3
+      end
+
+      it "resolves nested in parent scope" do
+        expect(@l11.resolve_label :"l12:label7").to eq 7
+        expect(@l12.resolve_label :"l11:label5").to eq 5
+      end
+
+    end
+
   end
 
   describe "labels with checkpoint configuration" do

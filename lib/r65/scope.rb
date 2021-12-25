@@ -31,7 +31,7 @@ module R65
       raise ArgumentError, "Label :#{name} is already defined in current scope" if @labels.has_key? name
       @labels[name] = @segment.pc
       full_name = name.to_s
-      traverse do |scope|
+      traverse_up do |scope|
         full_name = scope.name + ":" + full_name
       end
       checkpoints = checkpoint_configuration.map{|cfg|Label::Checkpoint.from cfg}.flatten
@@ -40,14 +40,25 @@ module R65
     end
 
     def resolve_label (name)
-      traverse do |scope|
+      # check up in chain
+      traverse_up do |scope|
         return scope.labels[name] if scope.labels.has_key? name
       end
 
-      rname = "#{root.name}:#{name.to_s}"
-      root.traverse_down do |s, qname|
+      # check from root
+      label_qname = "#{root.full_name}:#{name.to_s}"
+      root.traverse_down do |s|
         s.labels.each_pair do |lbl,addr|
-          return addr if "#{qname}:#{lbl.to_s}" == rname
+          return addr if "#{s.full_name}:#{lbl.to_s}" == label_qname
+        end
+      end
+
+      # check from current
+      current = parent.nil? ? self : parent
+      label_qname = "#{current.full_name}:#{name.to_s}"
+      current.traverse_down do |s|
+        s.labels.each_pair do |lbl,addr|
+          return addr if "#{s.full_name.delete_prefix self.full_name}:#{lbl.to_s}" == label_qname
         end
       end
 
@@ -139,11 +150,18 @@ module R65
       end
     end
 
-    def traverse ()
+    def traverse_up ()
       s = self
       while !s.nil?
         yield s
         s = s.parent
+      end
+    end
+
+    def traverse_down (&block)
+      yield self
+      scopes.each do |s|
+        s.traverse_down &block
       end
     end
 
@@ -156,11 +174,9 @@ module R65
       r
     end
 
-    def traverse_down (qname = name, &block)
-      yield self, qname
-      scopes.each do |s|
-        s.traverse_down "#{qname}:#{s.name}", &block
-      end
+    def full_name
+      return @name if @parent.nil?
+      "#{@parent.full_name}:#{@name}"
     end
 
   end
