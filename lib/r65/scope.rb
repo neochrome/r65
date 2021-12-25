@@ -121,10 +121,10 @@ module R65
       end
     end
 
-    def method_missing (name, *args, &immidiate)
+    def method_missing (name, *args, &immediate)
       raise NoMethodError, "No such instruction: #{name}" unless OP_CODES.has_key? name
-      raise ArgumentError, "Immidiate values doesn't have parameters" if immidiate and args.size > 0
-      args = [immidiate.call,:imm] if immidiate
+      raise ArgumentError, "Immediate values doesn't have parameters" if immediate and args.size > 0
+      args = [immediate.call,:imm] if immediate
       ins = Instruction.new @segment.pc, name, OP_CODES[name], self, args, caller.first
       @segment.add ins
     end

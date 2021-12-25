@@ -14,7 +14,7 @@ prg = Program.new cfg do
 
   ## Non-indexed, non-memory
   lsr            # accumulator
-  lda &0x42      # immidiate
+  lda &0x42      # immediate
   clc            # implied / none
 
   ## Non-indexed
@@ -38,7 +38,7 @@ prg = Program.new cfg do
   lda :foo+:bar          # label + label
   lda :foo.lo_b          # low byte of label address
   lda :foo.hi_b          # high byte of label address
-  lda &:foo.hi_b         # high byte of label address, as immidiate value
+  lda &:foo.hi_b         # high byte of label address, as immediate value
 
 
   # Pseudo instructions

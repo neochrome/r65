@@ -86,9 +86,9 @@ module R65
       end
       raise ArgumentError, "Missing argument(s) for #{@name}" if args.empty?
 
-      # detect immidiate
+      # detect immediate
       if args.last == :imm
-        raise TypeError, "Immidiate value not supported for #{@name}" unless modes.has_key? :imm
+        raise TypeError, "Immediate value not supported for #{@name}" unless modes.has_key? :imm
         @mode = :imm
         @op_code = modes[@mode]
         @arg = Addressing::Expression.from(args.first)
