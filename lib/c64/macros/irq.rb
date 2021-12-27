@@ -102,15 +102,23 @@ module C64
         class Chain
           def initialize()
             @links = []
+            @debug = false
+          end
+
+          def debug (state = true)
+            @debug = state
+            self
           end
 
           def at(line:, &block)
-            @links << { :line => line, :block => block, :stable => false }
+            # handler = debug_wrapper color: line * 16 / 255 % 16, &block
+            @links << { line: line, block: block, stable: false }
             @links.sort_by! {|link|link[:line]}
             self
           end
 
           def exactly_at(line:, &block)
+            # handler = debug_wrapper color: line * 16 / 255 % 16, &block
             @links << { line: line - 2, block: block, stable: true }
             @links.sort_by! {|link|link[:line]}
             self
@@ -125,15 +133,18 @@ module C64
 
           def init(*args,**kwargs,&block)
             links = @links
+            debug = @debug
 
             proc do
               handler_for = proc do |link, next_link|
                 next_label = :"irq#{next_link[:line]}"
+                handler = debug ? Chain.debug_wrapper(link) : link[:block]
+
                 label :"irq#{link[:line]}" do
                   if link[:stable]
-                    call StableHandler, line: next_link[:line], address: next_label, &link[:block]
+                    call StableHandler, line: next_link[:line], address: next_label, &handler
                   else
-                    call Handler, line: next_link[:line], address: next_label, &link[:block]
+                    call Handler, line: next_link[:line], address: next_label, &handler
                   end
                 end
               end
@@ -146,7 +157,26 @@ module C64
             end
           end
 
+          private
+          def self.debug_wrapper (link)
+            color = link[:line] * 16 / 255 % 16
+            block = link[:block]
+            proc do
+              lda VIC2::BorderColor
+              sta :restore_debug_border+1
+              lda &color
+              sta VIC2::BorderColor
+
+              call block
+
+              label :restore_debug_border
+              lda &0x00
+              sta VIC2::BorderColor
+            end
+          end
+
         end
+
       end
     end
   end

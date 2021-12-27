@@ -4,10 +4,25 @@ module C64
   module Macros
     module Utils
 
-      DebugRaster = proc do |color: VIC2::Colors::Black|
-        if $DEBUG
-          lda &color
-          sta VIC2::BorderColor
+      DebugRaster = proc do |color: VIC2::Colors::Black, block: nil|
+        if $DEBUG then
+          if block.nil? then
+            lda &color
+            sta VIC2::BorderColor
+          else
+            lda VIC2::BorderColor
+            sta :restore_debug_border+1
+            lda &color
+            sta VIC2::BorderColor
+
+            call block
+
+            label :restore_debug_border
+            lda &0x00
+            sta VIC2::BorderColor
+          end
+        else
+          call block unless block.nil?
         end
       end
 
