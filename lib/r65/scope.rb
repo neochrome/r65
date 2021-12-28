@@ -99,6 +99,8 @@ module R65
       end
     end
 
+    alias bytes byte
+
     def word (*words)
       words.flatten.map do |w|
         byte [w.lo_b,w.hi_b]
