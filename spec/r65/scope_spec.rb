@@ -103,8 +103,10 @@ describe R65::Scope do
     end
 
     it "fails to resolve a label from a different segment when not in scope" do
-      @scope.pc! 2
-      @scope.label :a_label
+      @scope.pc! 1
+      another_scope = @scope.scope :another
+      another_scope.pc! 2
+      another_scope.label :a_label
       segment_scope = @scope.segment :data, scope: :a_different_scope
       segment_scope.pc! 3
       expect{ segment_scope.resolve_label :a_label }.to raise_error ArgumentError
