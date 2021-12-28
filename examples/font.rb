@@ -22,7 +22,7 @@ end
 
 prg = Program.new cfg do
   call Macros::Bootstrap do
-    call vic2.mem_setup
+    call vic2.init
 
     # "clear" screen
     ldx &0

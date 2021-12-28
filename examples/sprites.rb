@@ -18,7 +18,7 @@ prg = Program.new cfg do
   segment! :code
 
   call Macros::Bootstrap do
-    call vic2.mem_setup
+    call vic2.init
 
     lda &0x00
     sta VIC2::Sprite::DoubleWidthRegister

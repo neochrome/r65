@@ -17,7 +17,7 @@ prg = Program.new cfg do
   segment! :code
 
   call Macros::Bootstrap do
-    call vic2.mem_setup
+    call vic2.init
     # enable bitmap
     lda VIC2::Control1::Register
     ora &VIC2::Control1::Bitmap
