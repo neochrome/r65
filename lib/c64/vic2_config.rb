@@ -81,6 +81,10 @@ module C64
         end
       end
 
+      def select_charset
+        C64::VIC2::Memory::SelectCharset
+      end
+
       def sprite_data (data_label, frame = 0)
         (data_label % 0x4000) / 64 + frame
       end

@@ -128,6 +128,23 @@ module C64
       Screen0x3800 = 0b11100000
       Screen0x3c00 = 0b11110000
       ScreenDefault= Screen0x0400
+      SelectCharset = proc do |address:nil, index:nil|
+        raise ArgumentError, "You must supply either address or index" unless address.nil? ^ index.nil?
+        config = CharDefault
+        unless address.nil?
+          raise RangeError, "Address must be between 0x0000 and 0x3800, was %04x" % address unless (0x0000..0x3800).include? address
+          raise RangeError, "Address must be divisible by 0x0800" unless address.divisible_by? 0x0800
+          config = (address / 0x0800) << 1
+        end
+        unless index.nil?
+          raise RangeError, "Index must be between 0 and 7, was #{index}" unless (0..7).include? index
+          config = index << 1
+        end
+        lda SetupRegister
+        ana &CharMask
+        ora &config
+        sta SetupRegister
+      end
     end
 
     module Bank
