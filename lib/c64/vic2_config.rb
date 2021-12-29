@@ -97,8 +97,8 @@ module C64
         VIC2::Sprite::Y[sprite]
       end
 
-      def sprite_x_bit8 (sprite = 0)
-        VIC2::Sprite::XBit8[sprite]
+      def sprite_x_bit8
+        VIC2::Sprite::XBit8
       end
 
       def sprite_color (sprite = 0)
