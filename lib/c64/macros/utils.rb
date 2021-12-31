@@ -26,6 +26,20 @@ module C64
         end
       end
 
+      VSync = proc do |line:|
+        lda &line.lo_b
+        label :vsync do
+          cmp VIC2::RasterCounter
+          bne :vsync
+          bit VIC2::Control1::Register
+          if line < 256 then
+            bmi :vsync
+          else
+            bpl :vsync
+          end
+        end
+      end
+
       ClearScreen = proc do |color: VIC2::Colors::Black, fillbyte: 0x20, screen: VIC2::DefaultScreen|
         lda &color
         sta VIC2::BackgroundColor
