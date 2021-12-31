@@ -19,13 +19,13 @@ prg = Program.new do
 
   chain = C64::Macros::IRQ::Raster::Chain.new
 
-  chain.exactly_at line: 190 do
+  chain.exactly_at line: 260 do
     [14,6].each do |color|
       call_with_scope line, color, scope: color.to_s
     end
   end
 
-  chain.exactly_at line: 206 do
+  chain.exactly_at line: 285 do
     [14,0].each do |color|
       call_with_scope line, color
     end

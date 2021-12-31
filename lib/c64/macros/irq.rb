@@ -47,8 +47,15 @@ module C64
           ldx &(address).hi_b
           sta VIC2::IRQ::VectorLo
           stx VIC2::IRQ::VectorHi
-          lda &(line)
+          lda &(line.lo_b)
           sta VIC2::RasterCounter
+          lda VIC2::Control1::Register
+          if line > 255 then
+            ora &VIC2::Control1::RasterBit8
+          else
+            ana &!VIC2::Control1::RasterBit8
+          end
+          sta VIC2::Control1::Register
         end
 
         Handler = proc do |address: nil, line: nil, block:|
