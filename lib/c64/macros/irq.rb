@@ -111,14 +111,12 @@ module C64
           end
 
           def at(line:, &block)
-            # handler = debug_wrapper color: line * 16 / 255 % 16, &block
             @links << { line: line, block: block, stable: false }
             @links.sort_by! {|link|link[:line]}
             self
           end
 
           def exactly_at(line:, &block)
-            # handler = debug_wrapper color: line * 16 / 255 % 16, &block
             @links << { line: line - 2, block: block, stable: true }
             @links.sort_by! {|link|link[:line]}
             self
