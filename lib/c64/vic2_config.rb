@@ -105,6 +105,22 @@ module C64
         VIC2::Sprite::XBit8
       end
 
+      def sprite_x_set_bit8 (sprite = 0)
+        proc do
+          lda VIC2::Sprite::XBit8
+          ora &(1 << sprite)
+          sta VIC2::Sprite::XBit8
+        end
+      end
+
+      def sprite_x_clear_bit8 (sprite = 0)
+        proc do
+          lda VIC2::Sprite::XBit8
+          ana &!(1 << sprite)
+          sta VIC2::Sprite::XBit8
+        end
+      end
+
       def sprite_color (sprite = 0)
         VIC2::Sprite::Color[sprite]
       end
