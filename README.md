@@ -19,7 +19,6 @@ require "r65" # 65xx assembling functions & macros
 require "c64" # C64 specific constants, macros & loaders
 
 include R65
-include C64 # shadows Program with a C64-emulator aware version (#run)
 
 prg = Program.new do
   call Macros::Bootstrap do

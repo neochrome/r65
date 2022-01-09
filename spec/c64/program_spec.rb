@@ -1,10 +1,10 @@
 require_relative "../../lib/c64"
 
-describe C64::Program do
+describe C64::ProgramExtensions do
 
   describe "end-to-end" do
     it "hello world" do
-      prg = C64::Program.new do
+      prg = R65::Program.new do
         call C64::Macros::Bootstrap do
           ldx &0
           label :loop do

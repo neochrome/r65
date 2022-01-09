@@ -2,7 +2,7 @@ require_relative "../r65"
 
 module C64
 
-  class Program < R65::Program
+  module ProgramExtensions
 
     def write_and_run (filename = nil, debug: false)
       filename = write filename
