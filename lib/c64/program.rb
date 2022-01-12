@@ -29,9 +29,9 @@ module C64
           file.print "\n"
         end
         puts "#{labels.size} labels and #{checkpoints.size} checkpoints written to #{symbols_file}"
-        exec "x64", "-moncommands", symbols_file, "-autostartprgmode", "1", filename
+        spawn "x64", "-moncommands", symbols_file, "-autostartprgmode", "1", filename
       else
-        exec "x64", "-autostartprgmode", "1", filename
+        spawn "x64", "-autostartprgmode", "1", filename
       end
 
     end
