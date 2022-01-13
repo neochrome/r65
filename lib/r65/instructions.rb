@@ -21,6 +21,28 @@ module R65
     end
   end
 
+  class AddressOf
+    def initialize (expr, scope)
+      @expr = expr
+      @scope = scope
+      @byte = 0
+    end
+    def to_s
+      "%02x" % @byte
+    end
+    def size
+      1
+    end
+    def as_bytes
+      [@byte]
+    end
+    def assemble!
+      @byte = @expr.resolve! do |label|
+        @scope.resolve_label label
+      end.value
+    end
+  end
+
   class Label
     attr_reader :checkpoints
     def initialize (name, checkpoints: [])

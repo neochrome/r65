@@ -26,6 +26,10 @@ module R65
         end
       end
 
+      def to_ary
+        [self]
+      end
+
       def method_missing (method)
         ProxyExpression.new self, method
       end

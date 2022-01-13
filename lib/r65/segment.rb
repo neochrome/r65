@@ -23,7 +23,7 @@ module R65
 
     def add (instruction)
       case instruction
-      when Data, Instruction
+      when Data, Instruction, AddressOf
         raise RangeError, ("PC 0x%04x will be outside segment (0x%04x - 0x%04x)" % [@pc, @range.min, @range.max]) if @pc + instruction.size > @range.max + 1
       when Label
       else
@@ -67,7 +67,7 @@ module R65
       ".#{@name}\n" + @instructions
         .chunk{|addr,ins|ins.class}
         .map{|kind,instructions|
-          if kind == Data
+          if kind == Data or kind == AddressOf
             next instructions.each_with_index.chunk{|ins,i|i/8}.map{|_,items|
               addr = items[0][0][0]
               data = items.map{|(addr,ins),_|"%02x" % ins.as_bytes}.join(" ")

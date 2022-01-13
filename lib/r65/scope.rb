@@ -89,10 +89,12 @@ module R65
     end
 
     def byte (*bytes)
-      bytes.flatten.each do |b|
+      bytes.flatten(1).each do |b|
         case b
         when Integer
           @segment.add Data.new b
+        when Addressing::Expression
+          @segment.add AddressOf.new(b, self)
         else
           raise ArgumentError, "Argument '#{b}' of unsupported type #{b.class}"
         end
@@ -102,10 +104,12 @@ module R65
     alias bytes byte
 
     def word (*words)
-      words.flatten.map do |w|
-        byte [w.lo_b,w.hi_b]
+      words.flatten(1).each do |w|
+        bytes w.lo_b, w.hi_b
       end
     end
+
+    alias words word
 
     def fill (n, byte = 0x00)
       byte Array.new n,byte
