@@ -3,6 +3,7 @@ on:
     tags-ignore:
       - 'v*'
   pull_request_target:
+  workflow_dispatch:
 
 name: CI
 
@@ -11,11 +12,11 @@ jobs:
   ci:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
-        fail-fast: false
         ruby-version:
-          - 3.0
-          - 3.1
+          - '3.0'
+          - '3.1'
     steps:
       - uses: actions/checkout@v3
 
