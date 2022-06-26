@@ -22,7 +22,6 @@ jobs:
 
       - uses: actions/setup-ruby@v1
         with:
-          bundler-cache: true
           ruby-version: ${{ matrix.ruby-version }}
       - run: bundle install
       - run: bundle exec rake
