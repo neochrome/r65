@@ -4,6 +4,8 @@ on:
       - '*'
     tags-ignore:
       - 'v*'
+    paths-ignore:
+      - '*.md'
   pull_request_target:
   workflow_dispatch:
 
