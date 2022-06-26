@@ -1,0 +1,27 @@
+on:
+  push:
+    tags-ignore:
+      - 'v*'
+  pull_request_target:
+
+name: CI
+
+jobs:
+
+  ci:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        fail-fast: false
+        ruby-version:
+          - 3.0
+          - 3.1
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-ruby@v1
+        with:
+          bundler-cache: true
+          ruby-version: ${{ matrix.ruby-version }}
+      - run: bundle install
+      - run: bundle exec rake
