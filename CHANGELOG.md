@@ -44,7 +44,7 @@
 * updated c64 constants
 * make macro calling work with all sorts of args
 
-## [0.1.0](https://github.com/neochrome/r65/v0.1.0) (2021-11-28)
+## [0.1.0](https://github.com/neochrome/r65/compare/4dbc6ae...v0.1.0) (2021-11-28)
 
 * package as a gem
 * unlicense
