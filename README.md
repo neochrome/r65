@@ -10,6 +10,7 @@ gem "r65" github: "neochrome/r65", tag: 'v0.1.0' # specific version
 
 And then execute:
 ```
+bundle config path 'vendor/bundle' --local # sets up bundle for local project
 bundle install
 ```
 
