@@ -313,7 +313,8 @@ They live in the following modules:
 Standard ascii strings may have their characters mapped to screen codes the following way:
 ```ruby
 label :message
-bytes "MY MESSAGE".to_scr
+bytes "MY MESSAGE".to_scr  # converts "MY MESSAGE" to screen code bytes
+text "ANOTHER MESSAGE"     # converts "ANOTHER MESSAGE" to screen code bytes (shortcut)
 ```
 
 #### VIC2 configuration

@@ -11,4 +11,8 @@ module R65
   class Program
     include C64::ProgramExtensions
   end
+
+  class Scope
+    include C64::ScopeExtensions
+  end
 end

@@ -1,6 +1,8 @@
 require_relative "../lib/r65"
+require_relative "../lib/c64"
 
 include R65
+include C64
 
 # Sets up named segments, which may be used to
 # organize instructions into predictable groupings
@@ -50,6 +52,7 @@ prg = Program.new cfg do
   fill 4, 0x04           # shortcut to fill out n bytes as specified
   pc! 0x0054             # sets the program counter to the specified address..
                          # ..and fills the resulting gaps with zeroes
+  text "SOME TEXT"       # transforms the text to screen code bytes
 
   label :foo             # a regular label
   label :bar do          # a label..
