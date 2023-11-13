@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.0](https://github.com/neochrome/r65/compare/v0.5.0...v0.6.0) (2023-11-13)
+
+
+### Features
+
+* add pseudo instruction to encode text ([5e353b1](https://github.com/neochrome/r65/commit/5e353b16f1cfb8ec8f11d834a4d54e244700ea2e))
+
 ## [0.5.0](https://github.com/neochrome/r65/compare/v0.4.1...v0.5.0) (2021-12-29)
 
 * Bump r65 to 0.5.0 (tag: v0.5.0)
