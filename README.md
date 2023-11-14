@@ -116,13 +116,14 @@ lda &:foo.hi_b # high byte of label address, as immediate value
 
 #### Data directives
 ```ruby
-byte 0xee              # simple byte
-word 0x1234            # word as two bytes, LE - order
-align! 8               # align to next 8 (power of two) address
-byte (0x00..0x15).to_a # array of bytes
-fill 4, 0x04           # shortcut to fill out n bytes as specified
-pc! 0x0054             # sets the program counter to the specified address..
-                       # ..and fills the resulting gaps with zeroes
+byte 0xee               # simple byte
+word 0x1234             # word as two bytes, LE - order
+bytes (0x00..0x15).to_a # array of bytes
+text "SOME TEXT"        # transforms the text to screen code bytes
+fill 4, 0x04            # shortcut to fill out n bytes as specified
+align! 8                # align to next 8 (power of two) address
+pc! 0x0054              # sets the program counter to the specified address..
+                        # ..and fills the resulting gaps with zeroes
 ```
 
 #### Segments
