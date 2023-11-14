@@ -400,7 +400,13 @@ Run tests:
 bundle exec rake test
 ```
 
-Cutting a release:
-```
-bundle exec rake bump:<major|minor|patch>
-```
+## Contributing
+1. Fork it (<https://github.com/neochrome/r65/fork>)
+2. Create your feature branch (`git checkout -b my-new-feature`)
+3. Commit your changes (`git commit -am 'feat: some new feature'`),
+   make sure to use <https://www.conventionalcommits.org/>.
+4. Push to the branch (`git push origin my-new-feature`)
+5. Create a new Pull Request
+
+## Releasing
+Releases are automated using [Release Please](https://github.com/apps/release-please).
