@@ -1,3 +1,4 @@
+handleGHRelease: true
 primaryBranch: master
 releaseType: ruby
-handleGHRelease: true
+versionFile: lib/r65/version.rb
