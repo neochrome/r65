@@ -9,9 +9,9 @@ module C64
       if debug
         symbols_file = filename + ".sym"
         write_symbols_and_checkpoints symbols_file
-        exec "x64", "-moncommands", symbols_file, "-autostartprgmode", "1", filename
+        Process.wait spawn "x64", "-moncommands", symbols_file, "-autostartprgmode", "1", filename
       else
-        spawn "x64", "-autostartprgmode", "1", filename
+        Process.wait spawn "x64", "-autostartprgmode", "1", filename
       end
     end
 
@@ -19,7 +19,7 @@ module C64
       filename = write filename
       symbols_file = filename + ".sym"
       write_symbols_and_checkpoints symbols_file
-      exec "c64-debugger", "-symbols", symbols_file, "-prg", filename
+      Process.wait spawn "c64-debugger", "-symbols", symbols_file, "-prg", filename
     end
 
     def write_symbols_and_checkpoints (filename)
