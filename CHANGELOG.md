@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.1](https://github.com/neochrome/r65/compare/v0.6.0...v0.6.1) (2023-11-15)
+
+
+### Miscellaneous Chores
+
+* release 0.6.1 ([8746835](https://github.com/neochrome/r65/commit/87468359efec50573485a7d8f052c9dcf837f344))
+
 ## [0.6.0](https://github.com/neochrome/r65/compare/v0.5.0...v0.6.0) (2023-11-13)
 
 
