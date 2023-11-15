@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.2](https://github.com/neochrome/r65/compare/v0.6.1...v0.6.2) (2023-11-15)
+
+
+### Bug Fixes
+
+* **c64:** program execution should wait for subprocess to finish ([a95c0c7](https://github.com/neochrome/r65/commit/a95c0c7ac87dbe8bce8b4dd79f3620e18bb54af7))
+
 ## [0.6.1](https://github.com/neochrome/r65/compare/v0.6.0...v0.6.1) (2023-11-15)
 
 
